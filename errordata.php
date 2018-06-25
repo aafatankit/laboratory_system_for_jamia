@@ -1,13 +1,14 @@
 <?php
 include 'connectdb.php';
-if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='report')){
+if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='data')){
     header('location:index.php');
 }
 ?>
 
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-<head> 
+<head>
 	<title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,42 +16,42 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='report')){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    
     <style type="text/css">
     	.myfont{
     		font-family: Lucida Grande;
+    		font-weight: bold;
     	}
+
+        .smallfont{
+            font-size: 1.3em;
+        }
     </style>
 </head>
-<body> 
+<body>
     <div class="jumbotron bg-dark">
         <div class="container">
         	<h1 class="text-white myfont" style="font-size: 45px;"><?php echo $_SESSION['staff']; ?></h1>
         	<a href="logout.php" class="float-right myfont text-info btn">LOGOUT</a>
-            <a href="adhaarsearch.php" class="float-right myfont text-info btn">ADHAAR NO.</a>
-            <a href="reporter.php" class="float-right myfont text-info btn">REGISTRATION ID</a>
-            <a href="reporterhome.php" class="float-right myfont text-info btn">HOME</a>
+            <a href="showpatient.php" class="float-right myfont text-info btn">VIEW PATIENT</a>
+            <a href="datafeeder.php" class="float-right myfont text-info btn">HOME</a>
         </div>
     </div>
     <div>
-        <h1 class="text-center">Enter Patient Registration No.</h1>
+        <h1 class="text-center myfont">ERROR</h1>
+        <p class="text-center">Invalid Details Entered.</p>
     </div>
     <br><br>
     <div class="container bg-light">
     	<div class="row">
-    		<div class="col-lg-3"></div>
-    		<div class="col-lg-6">
-    			<form action="patientvalidation.php" method="post">
-    				<br><br>
-    				<div class="form-group">
-    					<label>Registration No:</label>
-    					<input type="text" name="regno" class="form-control" placeholder="Eg. 1234567">
-    					<span></span>
-    				</div>
-    				<br>
-    				<div class="float-right">
-    					<input type="submit" value="Submit" class="btn btn-info">
-    				</div>
-    			</form>
+    		<div class="col-lg-1"></div>
+            <div class="col-lg-10 text-center">
+            	<br><br>
+                <?php
+                	echo $_SESSION['message'];
+                ?>  
+                <br><br>
+                <a href="datafeeder.php" class="btn btn-danger">Go Back</a> 
     			<br><br><br><br><br><br>
     		</div>	
     	</div>

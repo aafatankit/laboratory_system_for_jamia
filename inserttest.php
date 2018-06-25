@@ -11,10 +11,11 @@ $tcost=$_POST['amt'];
 if($con){
 	$q="insert into test(testname,amount,department,avail) values('$tname',$tcost,'$tdepartment',1)";
 	mysqli_query($con,$q);
-	header('location:admin.php');
+	$_SESSION['test']=$tname;
+	header('location:addcontent.php');
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 
 ?>

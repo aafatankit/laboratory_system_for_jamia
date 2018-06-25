@@ -25,7 +25,7 @@ if($con){
 				header('location:samplecollector.php');
 				break;
 			case 'report':
-				header('location:reporter.php');
+				header('location:reporterhome.php');
 				break;
 			case 'test':
 				header('location:tester.php');
@@ -36,10 +36,10 @@ if($con){
 		}
 	}
 	else{
-		echo "not exist";
+		header('location:notexist.php');
 	}
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 ?>

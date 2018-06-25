@@ -3,14 +3,14 @@ include 'connectdb.php';
 if((!isset($_SESSION['staff']))||(($_SESSION['usertype']!='data')&&($_SESSION['usertype']!='admin'))){
     header('location:index.php');
 }
-
+ 
 
 if(isset($_POST['pid'])){
     $patient=$_POST['pid'];
 }
 else{
-    if(isset($_SESSION['patient_id'])){
-        $patient=$_SESSION['patient_id'];
+    if(isset($_SESSION['pdf_id'])){
+        $patient=$_SESSION['pdf_id'];
     }
     else{
         if($_SESSION['usertype']=='data'){
@@ -27,6 +27,9 @@ if($con){
     $getamount="select * from bills where regid=$patient";
     $amount_result=mysqli_query($con,$getamount);
     $index=mysqli_fetch_array($amount_result);
+}
+else{
+    header('location:nodatabase.php');
 }
 ?>
 
@@ -89,17 +92,17 @@ if($con){
                 echo '</div>';
             echo '</div>';
             echo '<div class="row">';
-                echo '<div class="col-lg-9">';
+                echo '<div class="col-lg-8">';
                         echo '<br><br><br>';
                         echo '<h5>Reg No. '.$row['regid'].'</h5>';
                         echo '<br>';
                         echo '<h5>Name: '.$row['name'].'</h5>';
                 echo '</div>';
-                echo '<div class="col-lg-3">';
+                echo '<div class="col-lg-4">';
                 $_SESSION['printno']=$row['regid'];
                 $bnum=$row['regid'];
                 $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
-                $barcode=$generator->getBarcode($bnum, $generator::TYPE_CODE_128);
+                $barcode=$generator->getBarcode($bnum, $generator::TYPE_CODE_39);
                 echo '<p class="text-right">'.$barcode.'</p>';
                 echo '</div>';
             echo '</div>';
@@ -183,6 +186,7 @@ if($con){
                     echo '</table>';
                     if($index['balance']==0){
                         echo '<p>Payment Status: <strong>PAID</strong></p>';
+                        echo '<p>Paid: '.$index['paid'].'/- &emsp;&emsp; Balance: '.$index['balance'].'/-</p>';
                     }
                     else{
                         echo '<p>Payment Status: <br>Paid: '.$index['paid'].'/- &emsp;&emsp; Balance: '.$index['balance'].'/-</p>';
@@ -192,7 +196,7 @@ if($con){
             echo '<br><br><br><br><br><br>';
         }
         else{
-            echo "Database is not Connected";
+            header('location:nodatabase.php');
         }
         	        
     	?>

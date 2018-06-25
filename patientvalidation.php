@@ -7,11 +7,12 @@ $code=$_POST['regno'];
 
 $q="select * from patient where regid=$code";
 
-$result=mysqli_query($con,$q);
-$row=mysqli_fetch_array($result);
-$available=mysqli_num_rows($result);
+$getdata=mysqli_query($con,$q);
+$row=mysqli_fetch_array($getdata);
+$available=mysqli_num_rows($getdata);
 
 if($available!=0){
+    
     $_SESSION['patient']=$code;
         switch ($_SESSION['usertype']) {
             // case 'admin':
@@ -24,7 +25,7 @@ if($available!=0){
                 header('location:inputcollection.php');
                 break;
             case 'report':
-                header('location:createpdf.php');
+                header('location:patientreport.php');
                 break;
             case 'test':
                 header('location:inputtest.php');

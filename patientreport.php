@@ -1,12 +1,36 @@
 <?php
 include 'connectdb.php';
-if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='data')){
-    header('location:index.php');
+// if((!isset($_SESSION['staff']))||(($_SESSION['usertype']!='data')&&($_SESSION['usertype']!='admin'))){
+//     header('location:index.php');
+// }
+ 
+
+// if(isset($_POST['pid'])){
+//     $patient=$_POST['pid'];
+// }
+// else{
+    if(isset($_SESSION['patient'])){
+        $patient=$_SESSION['patient'];
+    }
+//     else{
+//         if($_SESSION['usertype']=='data'){
+//             header('location:datafeeder.php');
+//         }
+//         else{
+//             header('location:admin.php');
+//         }
+//     }
+// }
+
+if($con){
+    require 'vendor/autoload.php';
+    $getamount="select * from bills where regid=$patient";
+    $amount_result=mysqli_query($con,$getamount);
+    $index=mysqli_fetch_array($amount_result);
 }
-if(!isset($_SESSION['patient_id'])){
-    header('datafeeder.php');
+else{
+    header('location:nodatabase.php');
 }
-$patient=$_SESSION['patient_id'];
 ?>
 
 <!DOCTYPE html>
@@ -29,28 +53,43 @@ $patient=$_SESSION['patient_id'];
     <div class="jumbotron bg-dark">
         <div class="container">
         	<h1 class="text-white myfont" style="font-size: 45px;"><?php echo $_SESSION['staff']; ?></h1>
+        	<a href="logout.php" class="float-right myfont text-info btn">LOGOUT</a>
+            <a href="adhaarsearch.php" class="float-right myfont text-info btn">ADHAAR NO.</a>
+            <a href="reporter.php" class="float-right myfont text-info btn">REGISTRATION ID</a>
+            <a href="reporterhome.php" class="float-right myfont text-info btn">HOME</a>
         </div>
     </div>
     <div>
-        <h1 class="text-center">Payment</h1>
-        <p class="text-center">Please Verify all details, after Accepting Payment this process can not be reverse.</p>
+        <h1 class="text-center">Patient Details</h1>
     </div>
     <br><br>
     <div class="container bg-light">
     	<?php
         if($con){
-            $q="select * from temp_patient where regid=$patient";
+            $q="select * from patient where regid=$patient";
             $result=mysqli_query($con,$q);
             $row=mysqli_fetch_array($result);
             echo '<div class="row">';
                 echo '<div class="col-lg-6">';
+                echo '</div>';
+                echo '<div class="col-lg-6">';
+                        echo '<br><br>';
+                        echo '<h5 class="text-right">Date: '.$row['regdate'].'</h5>';
+                echo '</div>';
+            echo '</div>';
+            echo '<div class="row">';
+                echo '<div class="col-lg-8">';
                         echo '<br><br><br>';
                         echo '<h5>Reg No. '.$row['regid'].'</h5>';
                         echo '<br>';
                         echo '<h5>Name: '.$row['name'].'</h5>';
-                echo '</div>';echo '<div class="col-lg-6">';
-                        echo '<br><br>';
-                        echo '<h5 class="text-right">Date: '.$row['regdate'].'</h5>';
+                echo '</div>';
+                echo '<div class="col-lg-4">';
+                $_SESSION['printno']=$row['regid'];
+                $bnum=$row['regid'];
+                $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+                $barcode=$generator->getBarcode($bnum, $generator::TYPE_CODE_39);
+                echo '<p class="text-right">'.$barcode.'</p>';
                 echo '</div>';
             echo '</div>';
             echo '<div class="row">';
@@ -112,6 +151,7 @@ $patient=$_SESSION['patient_id'];
                                 echo '<th>#</th>';
                                 echo '<th>Test Name</th>';
                                 echo '<th>Amount</th>';
+                                echo '<th>Status</th>';
                             echo '</tr>';
                         echo '</thead>';
                         echo '<tbody>';
@@ -120,6 +160,10 @@ $patient=$_SESSION['patient_id'];
                                 echo '<td>'.$s.'</td>';
                                 echo '<td>'.$row['testname'].'</td>';
                                 echo '<td>&#8377;'.$row['amount'].'</td>';
+                                if($row['test_status']==1)
+                                    echo '<td>Available</td>';
+                                else
+                                    echo '<td>Not Available</td>';
                             echo '</tr>';
                             $s++;
                             $total=$total+$row['amount'];
@@ -128,48 +172,37 @@ $patient=$_SESSION['patient_id'];
                                 echo '<td>*</td>';
                                 echo '<td>Total Amount</td>';
                                 echo '<td>&#8377;'.$total.'/-</td>';
+                                echo '<td></td>';
                             echo '</tr>';  
                         echo '</tbody>';
                     echo '</table>';
+                    if($index['balance']==0){
+                        echo '<p>Payment Status: <strong>PAID</strong></p>';
+                    }
+                    else{
+                        echo '<p>Payment Status: <br>Paid: '.$index['paid'].'/- &emsp;&emsp; Balance: '.$index['balance'].'/-</p>';
+                    }
                 echo '</div>';
             echo '</div>';
-            echo '<br>';
-            $_SESSION['total_amount']=$total;
-            echo '<form action="payment_confirmed.php" method="post" class="form-horizontal" id="payment" onsubmit="return validate()">';
-                echo '<div class="form-group">';
-                echo '<label>Currently Paid Amount :&nbsp;&nbsp; &#8377;</label>';
-                echo '<input type="text" name="amount" value="" id="pay">';
-                echo '<span class="text-danger" id="perror"></span>';
-                echo '</div>';
-            echo '</form>';
-                echo '<button type="submit" form="payment" class="btn btn-success float-left">Accept Payment</button>';
-                echo '<button class="btn btn-danger float-right" id="decline" onclick="move()">Decline Payment</button>';
-                echo '</div>';
             echo '<br><br><br><br><br><br>';
+            $_SESSION['printid']=$row['regid']; 
         }
         else{
             header('location:nodatabase.php');
         }
         	        
-    			?>
+    	?>
+        <div class="text-center">
+            <button onclick="openInNewTab()" class="btn btn-info">Print Reports</button>
+        </div>
+        <br><br><br><br><br><br>
     </div>
 
+
     <script type="text/javascript">
-        function validate(){
-            var amt=document.getElementById("pay").value;
-            var amountcheck = /^[1-9]{1,}[0-9]*$/;
-            if(amountcheck.test(amt)){
-                document.getElementById("perror").innerHTML="";
-                return true;
-            }
-            else{
-                document.getElementById("perror").innerHTML="*Please Enter Valid Amount";
-                return false;
-            }
-            
-        }
-        function move(){
-            window.location='datafeeder.php';
+        function openInNewTab() {
+        var win = window.open('printall.php');
+        win.focus();
         }
     </script>
 </body>

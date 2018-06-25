@@ -41,6 +41,6 @@ if($con){
 	header('location:datafeeder.php');
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 ?>

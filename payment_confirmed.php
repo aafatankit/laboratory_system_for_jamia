@@ -37,10 +37,12 @@ if($con){
 
 	$q="insert into bills(regid,name,total,paid,balance) values($id,'$pname',$total,$paid,$balance)";
 	mysqli_query($con,$q);
+	$_SESSION['pdf_id']=$_SESSION['patient_id'];
+	unset($_SESSION['patient_id']);
 	unset($_SESSION['$total_amount']);
 	header('location:patient.php');
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 ?>

@@ -1,6 +1,9 @@
 <?php
+//define('FPDF_FONTPATH', 'font/');
 include 'connectdb.php';
-require('pdf/fpdf.php');
+//require_once('pdf/code39.php');
+require_once('pdf/fpdf.php');
+
 
 if($con){
 	$patient=$_SESSION['printno'];
@@ -12,7 +15,7 @@ if($con){
     $amt=mysqli_fetch_array($bill);
 }
 else{
-	echo "database is not connected";
+	header('location:nodatabase.php');
 }
 
 
@@ -44,12 +47,14 @@ class PDF extends FPDF{
 
 // Instanciation of inherited class
 $pdf = new PDF();
+//$code=new PDF_Code39();
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times','BI',18);
 $pdf->Cell(0,14,'Receipt Copy',0,1,"C");
 $pdf->SetFont('Times','B',10);
 $pdf->Cell(40,10,'Reg No.  '.$row['regid'],0,0,"L");
+//$code->Code39(10, 30,'1234');
 $pdf->SetFont('Times','',10);
 //$bnum=$row['regid'];
 // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();

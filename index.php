@@ -13,6 +13,15 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
     <style type="text/css">
+        @font-face{
+            font-family: "Helvetica";
+            src: url('fonts/HelveticaNeueLight.tff');
+            }
+        @font-face{
+            font-family: "Lucida Grande";
+            src: url('fonts/LucidaGrande.tff');
+            }
+
         .myfont{
             font-family: Lucida Grande;
         }

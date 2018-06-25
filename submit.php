@@ -15,6 +15,6 @@ if($con){
     header('location:inputcollection.php');
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 ?>

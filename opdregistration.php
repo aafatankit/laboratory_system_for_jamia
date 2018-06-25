@@ -1,34 +1,60 @@
-<?php
+<?php 
 include 'connectdb.php';
 if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='data')){
     header('location:index.php');
 }
 
-$pheight=$_POST['height'];
-$pweight=$_POST['weight'];
-$pemail=$_POST['email'];
-$padhaar=$_POST['adhaar'];
-$pdepartment=$_POST['department'];	
-$pname=$_POST['name'];
-$page=$_POST['age'];
-$psex=$_POST['sex'];
-$pmobile=$_POST['mobile'];
-$paddress1=$_POST['address1'];
-$paddress2=$_POST['address2'];
-$paddress3=$_POST['address3'];
-$phospital=$_POST['hospital'];
-$ptestname=$_POST['testname'];
+
+// $pheight=$_POST['height'];
+// $pweight=$_POST['weight'];
+// $pemail=$_POST['email'];
+// $padhaar=$_POST['adhaar'];
+// $pdepartment=$_POST['department'];	
+// $pname=$_POST['name'];
+// $page=$_POST['age'];
+// $psex=$_POST['sex'];
+// $pmobile=$_POST['mobile'];
+// $paddress1=$_POST['address1'];
+// $paddress2=$_POST['address2'];
+// $paddress3=$_POST['address3'];
+// $phospital=$_POST['hospital'];
+// $ptestname=$_POST['testname'];
+// $total=count($ptestname);
+// $paddress=$paddress1.' '.$paddress2.' '.$paddress3;
+
+$pheight=$_SESSION['height'];
+$pweight=$_SESSION['weight'];
+$pemail=$_SESSION['email'];
+$padhaar=$_SESSION['adhaar'];
+$pdepartment=$_SESSION['department'];	
+$pname=$_SESSION['name'];
+$page=$_SESSION['age'];
+$psex=$_SESSION['sex'];
+$pmobile=$_SESSION['mobile'];
+$phospital=$_SESSION['hospital'];
+$ptestname=$_SESSION['testname'];
 $total=count($ptestname);
-$paddress=$paddress1.' '.$paddress2.' '.$paddress3;
+$paddress=$_SESSION['paddress'];
 
 
+// echo $pheight.'<br>';
+// echo $pweight.'<br>';
+// echo $pemail.'<br>';
+// echo $padhaar.'<br>';
+// echo $pdepartment.'<br>';
+// echo $pname.'<br>';
+// echo $page.'<br>';
+// echo $psex.'<br>';
+// echo $pmobile.'<br>';
+// echo $phospital.'<br>';
+// echo $total.'<br>';
+// echo $paddress.'<br>';
 
 if($con){
 	$q="select max(sno) from temp_patient";
 	$result=mysqli_query($con,$q);
 	$row=mysqli_fetch_array($result);
 	$id=$row[0]+8239427;
-	//$feeder=$_SESSION['ecode'];
 	$time=date('Y-m-d H:i:s');
 	for($i=0;$i<$total;$i++){
 		$cost="select amount from test where testname='$ptestname[$i]'";
@@ -44,6 +70,6 @@ if($con){
 	header('location:bill.php');
 }
 else{
-	echo "Database Not Connected";
+	header('location:nodatabase.php');
 }
 ?>

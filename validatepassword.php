@@ -15,7 +15,7 @@ if($con){
 		header('location:permissiondenied.php');
 }
 else{
-	echo "Database is not connected";
+	header('location:nodatabase.php');
 }
 
 ?>

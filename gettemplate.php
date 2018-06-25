@@ -3,6 +3,17 @@ include 'connectdb.php';
 if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='test')){
     header('location:index.php');
 }
+if($con){
+    $testname=$_POST['test'];
+    $q="select * from template where testname='$testname'";
+    $result=mysqli_query($con,$q);
+    $data=mysqli_fetch_array($result);
+    $report=$data['template'];
+    $_SESSION['tname']=$testname;
+}
+else{
+    header('location:nodatabase.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,13 +47,13 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='test')){
     <?php
     	if($con){
     		$code=$_SESSION['patient'];
-    		$q="select * from patient where regid=$code and collect_status=1";
+    		$q="select * from patient where regid=$code and collect_status=1 and testname='$testname'";
     		$result=mysqli_query($con,$q);
 			$row=mysqli_fetch_array($result);
 			$available=mysqli_num_rows($result);
     	}
     	else{
-    		header('location:nodatabase.php');
+    		echo "database not connected";
     	}
     ?>
 
@@ -80,36 +91,33 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='test')){
     echo '<div class="container bg-light">';
     	echo '<div>';
             echo '<br>';
-            echo '<h2 class="text-center"><strong>Test List</strong></h2>';
+            //echo '<h2 class="text-center"><strong>'.$testname.'</strong></h2>';
+            echo '<h2 class="text-center"><strong>'.$row['testname'].'</strong></h2>';
+            echo '<p class="text-center">Here is the Template to Update Result. Please Edit only those values which are necessary.<br><span class="text-danger">**If you want to undo all change you made in Template, Please REFRESH the page to reload Template.</span></p>';
             echo '<br>';
-            echo '<form action="gettemplate.php" method="post">';
-                echo '<div>';
-                    echo '<table class="table">';
-                        echo '<thead>';
-                            echo '<tr>';
-                                echo '<td> &#465; </td>';
-                                echo '<td class="text-center">Test Name</td>';
-                                echo '<td class="text-center">Result</td>';
-                            echo '</tr>';
-                        echo '</thead>';
-                        echo '<tbody>';
-                            do{
-                            echo '<tr>';
-                                echo '<td><input type="radio" name="test" value="'.$row['testname'].'"></td>';
-                                echo '<td>'.$row['testname'].'</td>';
-                                echo '<td class="text-center">';
-                                    if($row['test_status']==0)
-                                        echo '-';
-                                    else
-                                        echo 'Updated';
-                                echo '</td>';
-                            echo '</tr>';
-                            }while($row=mysqli_fetch_array($result));
-                        echo '</tbody>';
-                    echo '</table>';
+            echo '<form action="insertresult.php" method="post">';
+                echo '<div class="row">';
+                    echo '<div class="col-lg-1"></div>';
+                    echo '<div class="col-lg-10">';
+                    if($row['test_status']==0){
+                        echo '<textarea name="patientresult" class="form-control" rows="20">'.$report.'</textarea>';
+                        echo '<br>';
+                        echo '<h4>Any Recommendation</h4>';
+                        echo '<textarea name="recommend" class="form-control" rows="8" placeholder="You can specify any Recommendation/Precautions for Patient/Doctor"></textarea>';
+                    }
+                    else{
+                        $getting="select * from result where rid=$code and tname='$testname'";
+                        $found=mysqli_query($con,$getting);
+                        $rdata=mysqli_fetch_array($found);
+                        echo '<textarea name="patientresult" class="form-control" rows="20">'.$rdata['report'].'</textarea>';
+                        echo '<input type="hidden" name="recommend" value=".">';
+                    }
+                        
+                    echo '</div>';
                 echo '</div>';
                 echo '<br>';
-                echo '<input type="submit" value="Update Result" class="btn btn-dark float-right">';
+                echo '<a href="inputtest.php" class="btn btn-secondary">Back</a>';
+                echo '<input type="submit" value="Update Result" class="btn btn-success float-right">';
             echo '</form>';
             echo '<br><br><br><br><br>';
         echo '</div>';

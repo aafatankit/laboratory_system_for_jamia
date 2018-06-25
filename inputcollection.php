@@ -42,7 +42,7 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='sample')){
 			$available=mysqli_num_rows($result);
     	}
     	else{
-    		echo "database not connected";
+    		header('location:nodatabase.php');
     	}
     ?>
 

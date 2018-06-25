@@ -1,6 +1,9 @@
 <?php
 include 'connectdb.php';
-if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='sample')){
+if(isset($_SESSION['patient'])){
+    unset($_SESSION['patient']);
+}
+if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='report')){
     header('location:index.php');
 }
 ?>
@@ -21,28 +24,30 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='sample')){
     	}
     </style>
 </head>
-<body>
+<body> 
     <div class="jumbotron bg-dark">
         <div class="container">
         	<h1 class="text-white myfont" style="font-size: 45px;"><?php echo $_SESSION['staff']; ?></h1>
         	<a href="logout.php" class="float-right myfont text-info btn">LOGOUT</a>
-            <a href="samplecollector.php" class="float-right myfont text-info btn">HOME</a>
+            <a href="adhaarsearch.php" class="float-right myfont text-info btn">ADHAAR NO.</a>
+            <a href="reporter.php" class="float-right myfont text-info btn">REGISTRATION ID</a>
+            <a href="reporterhome.php" class="float-right myfont text-info btn">HOME</a>
         </div>
     </div>
     <div>
-        <h1 class="text-center">Enter Patient Registration No.</h1>
+        <h1 class="text-center">Enter Patient's Adhaar No.</h1>
     </div>
     <br><br>
     <div class="container bg-light">
     	<div class="row">
     		<div class="col-lg-3"></div>
     		<div class="col-lg-6">
-    			<form action="patientvalidation.php" method="post" onsubmit="return validate()">
+    			<form action="adhaarvalidation.php" method="post">
     				<br><br>
     				<div class="form-group">
-    					<label>Registration No:</label>
-    					<input type="text" name="regno" class="form-control" id="number">
-    					<span class="text-danger" id="regnum"></span>
+    					<label>Adhaar No:</label>
+    					<input type="text" name="regno" class="form-control" placeholder="XXXX XXXX XXXX">
+    					<span></span>
     				</div>
     				<br>
     				<div class="float-right">
@@ -53,20 +58,5 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='sample')){
     		</div>	
     	</div>
     </div>
-    <script type="text/javascript">
-        function validate(){
-            var num=document.getElementById("number").value;
-            var numcheck = /^[1-9]{1,}[0-9]*$/;
-            if(numcheck.test(num)){
-                document.getElementById("regnum").innerHTML="";
-                return true;
-            }
-            else{
-                document.getElementById("regnum").innerHTML="*Please Enter Valid Registration No.";
-                return false;
-            }
-            
-        }
-    </script>
 </body>
 </html>

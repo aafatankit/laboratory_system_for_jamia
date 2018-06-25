@@ -54,7 +54,7 @@ else{
     	<div class="row">
     		<div class="col-lg-3"></div>
     		<div class="col-lg-6">
-    			<form action="opdregistration.php" method="post" onsubmit="return validate()">
+    			<form action="datavalidate.php" method="post" onsubmit="return validate()">
     				<br><br>
     				<div class="form-group">
     					<label>Name<span class="text-danger">*</span></label>

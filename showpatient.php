@@ -59,7 +59,7 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='data')){
                                             echo '<th>Age</th>';
                                             echo '<th>Sex</th>';
                                             echo '<th>Date</th>';
-                                        echo '</tr>';
+                                        echo '</tr>'; 
                                         echo '</thead>';
                                         echo '<tbody>';
                                         $row=mysqli_fetch_array($result);

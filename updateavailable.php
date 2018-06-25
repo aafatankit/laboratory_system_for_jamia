@@ -22,7 +22,7 @@ if($con){
 	}
 }
 else{
-	echo "Database is not Connected";
+	header('location:nodatabase.php');
 }
 
 ?>

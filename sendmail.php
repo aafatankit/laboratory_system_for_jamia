@@ -33,7 +33,7 @@ try {
     $mail->addAddress($to,$name);
     $mail->isHTML(true);                                  // Set email format to HTML
     $mail->Subject = 'Employee Registed Successfully';
-    $mail->Body    = 'Hello, '.$row['name'].'<br><br><br>This mail is to inform you that your account is successfully register to Jamia Laboratory, Now you will able to access the Laboratory System using you credentials as follows:<br><br>User ID: '.$row['emp_code'].'<br>Password: '.$row['pswd'].'<br>URL: www.jamialab.tk<br><br>Thankyou. <br><br><br>This is System Generate Email, Do Not Reply to this mail.<br>If There is any kind of problem arising with these details contact to your Administrative.<br><br><br><br>';
+    $mail->Body    = 'Hello, '.$row['name'].'<br><br><br>This mail is to inform you that your account is successfully register to Jamia Laboratory, Now you will able to access the Laboratory System using you credentials as follows:<br><br>User ID: '.$row['emp_code'].'<br>Password: '.$row['pswd'].'<br>URL: https://www.jamialab.tk<br><br>Thankyou. <br><br><br>This is System Generate Email, Do Not Reply to this mail.<br>If There is any kind of problem arising with these details contact to your Administrative.<br><br><br><br>';
     
     $mail->send();
 
@@ -44,7 +44,7 @@ try {
 
 }
 else{
-	echo "database is not connected";
+	header('location:nodatabase.php');
 }
 
 ?>

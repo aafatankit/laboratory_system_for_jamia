@@ -26,34 +26,15 @@ if((!isset($_SESSION['staff']))||($_SESSION['usertype']!='report')){
         <div class="container">
         	<h1 class="text-white myfont" style="font-size: 45px;"><?php echo $_SESSION['staff']; ?></h1>
         	<a href="logout.php" class="float-right myfont text-info btn">LOGOUT</a>
-            <a href="adhaarsearch.php" class="float-right myfont text-info btn">ADHAAR NO.</a>
-            <a href="reporter.php" class="float-right myfont text-info btn">REGISTRATION ID</a>
-            <a href="reporterhome.php" class="float-right myfont text-info btn">HOME</a>
+            <a <?php echo 'href="adhaarsearch.php"' ?> class="float-right myfont text-info btn">HOME</a>
         </div>
     </div>
+    <br><br>
     <div>
-        <h1 class="text-center">Enter Patient Registration No.</h1>
+        <h1 class="text-center">PATIENT NOT FOUND !!!</h1>
+        <h1 class="text-center">Invalid Adhaar Number !!!</h1>
     </div>
     <br><br>
-    <div class="container bg-light">
-    	<div class="row">
-    		<div class="col-lg-3"></div>
-    		<div class="col-lg-6">
-    			<form action="patientvalidation.php" method="post">
-    				<br><br>
-    				<div class="form-group">
-    					<label>Registration No:</label>
-    					<input type="text" name="regno" class="form-control" placeholder="Eg. 1234567">
-    					<span></span>
-    				</div>
-    				<br>
-    				<div class="float-right">
-    					<input type="submit" value="Submit" class="btn btn-info">
-    				</div>
-    			</form>
-    			<br><br><br><br><br><br>
-    		</div>	
-    	</div>
-    </div>
+    
 </body>
 </html>

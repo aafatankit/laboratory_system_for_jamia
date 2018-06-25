@@ -28,5 +28,8 @@ if($con){
 	mysqli_query($con,$q);
 	header('location:sendmail.php');
 }
+else{
+    header('location:nodatabase.php');
+}
 
 ?>
